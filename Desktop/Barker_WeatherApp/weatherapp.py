@@ -54,33 +54,31 @@ def getForecast(city, state, country, api_key):
     forecastDays=[]
     for item in data['list']:
         date = datetime.fromtimestamp(item['dt'])
-        weather = weatherDay(date.strftime("%A"), date.strftime("%m/%d"), item['main']['temp'], \
-                            item['main']['feels_like'], item['main']['temp_min'], item['main']['temp_max'], \
-                            item['main']['humidity'], item['weather'][0]['main'], item['weather'][0]['icon'])
-        forecastDays.append(weather)
-    day1= forecastDays[0]
-    day2= forecastDays[3]
-    day3= forecastDays[6]
-    day4= forecastDays[9]
-    day5= forecastDays[12]
-    print(day1.weekday, day1.date, day1.currtemp, day1.feelslike, day1.tempmin, day1.tempmax, day1.humidity, day1.condition, day1.icon,\
-          day2.weekday, day2.date, day2.currtemp, day2.feelslike, day2.tempmin, day2.tempmax, day2.humidity, day2.condition, day2.icon,\
-          day3.weekday, day3.date, day3.currtemp, day3.feelslike, day3.tempmin, day3.tempmax, day3.humidity, day3.condition, day3.icon,\
-          day4.weekday, day4.date, day4.currtemp, day4.feelslike, day4.tempmin, day4.tempmax, day4.humidity, day4.condition, day4.icon,\
-          day5.weekday, day5.date, day5.currtemp, day5.feelslike, day5.tempmin, day5.tempmax, day5.humidity, day5.condition, day5.icon,)
-    #return
-    
-
-#Parse JSON object
-
-
-#Request forecast with lat and long
-    ##call the method for lat/long retrieval
+        if date.hour == 11:
+            weather = weatherDay(date.strftime("%A"),
+                                 date.strftime("%m/%d"),
+                                 item['main']['temp'],
+                                 item['main']['feels_like'],
+                                 item['main']['temp_min'],
+                                 item['main']['temp_max'],
+                                 item['main']['humidity'],
+                                 item['weather'][0]['main'],
+                                 item['weather'][0]['icon'])
+            forecastDays.append(weather)
+    day1 = forecastDays[0]
+    day2 = forecastDays[1]
+    day3 = forecastDays[2]
+    day4 = forecastDays[3]
+    day5 = forecastDays[4]
+    return day1, day2, day3, day4, day5
 
 
 def main():
     #getCurrentWeather('Frankfort', 'KY', 'US', api_key)
-    getForecast('Frankfort', 'KY', 'US', api_key)
+    #forecastDays = getForecast('Frankfort', 'KY', 'US', api_key)
+    #print(forecastDays[0].weekday,forecastDays[1].weekday,forecastDays[2].weekday,forecastDays[3].weekday,forecastDays[4].weekday)
+    day1, day2, day3, day4, day5 = getForecast('Frankfort', 'KY', 'US', api_key)
+    return day1, day2, day3, day4, day5
 
 
 
