@@ -10,15 +10,16 @@
 <body>
 
 	<form method = "POST">
-		<input type = "text" name="city">
-		<input type = "text" name="state">
-		<input type = "text" name="country">
+		<input type = "text" name="city" placeholder = "Enter City">
+		<input type = "text" name="state" placeholder = "Enter State Code">
+		<input type = "text" name="country" placeholder = "US">
 		<button type="submit">Search</button>
 	</form>
-
+	
+	<div style="display: flex; gap: 15px; justify-content:center; margin-top: 50px: background-color: green">
 	<div class="day1">
- 		<h1>{{day1.weekday}}</h1>
-		 <img src=`https://openweathermap.org{{day1.icon1}}@2x.png` alt="weather icon">
+ 		<h2>{{day1.weekday}}</h2>
+		 <img src="https://openweathermap.org/img/wn/{{day1.icon}}@2x.png" alt="weather icon">
 		 <p>{{day1.date}}</p>
  		 <p>{{day1.currtemp}}</p>
 		 <p>{{day1.feelslike}}</p>
@@ -27,9 +28,9 @@
 		 <p>{{day1.humidity}}</p>
 		 <p>{{day1.condition}}</p>
 	</div>
-	<div class="day 2">
- 		<h1>{{day2.weekday}}</h1>
-		 <img src=`https://openweathermap.org{{day2.icon}}@2x.png` alt="weather icon">
+	<div class="day2">
+ 		<h2>{{day2.weekday}}</h2>
+		 <img src="https://openweathermap.org/img/wn/{{day2.icon}}@2x.png" alt="weather icon">
 		 <p>{{day2.date}}</p>
  		 <p>{{day2.currtemp}}</p>
 		 <p>{{day2.feelslike}}</p>
@@ -39,8 +40,8 @@
 		 <p>{{day2.condition}}</p>
 	</div>
 	<div class="day3">
- 		<h1>{{day3.weekday}}</h1>
-		 <img src=`https://openweathermap.org{{day3.icon}}@2x.png` alt="weather icon">
+ 		<h2>{{day3.weekday}}</h2>
+		 <img src="https://openweathermap.org/img/wn/{{day3.icon}}@2x.png" alt="weather icon">
 		 <p>{{day3.date}}</p>
  		 <p>{{day3.currtemp}}</p>
 		 <p>{{day3.feelslike}}</p>
@@ -50,8 +51,8 @@
 		 <p>{{day3.condition}}</p>
 	</div>
 	<div class="day4">
- 		<h1>{{day4.weekday}}</h1>
-		 <img src=`https://openweathermap.org{{day4.icon}}@2x.png` alt="weather icon">
+ 		<h2>{{day4.weekday}}</h2>
+		 <img src="https://openweathermap.org/img/wn/{{day4.icon}}@2x.png" alt="weather icon">
 		 <p>{{day4.date}}</p>
  		 <p>{{day4.currtemp}}</p>
 		 <p>{{day4.feelslike}}</p>
@@ -61,8 +62,8 @@
 		 <p>{{day4.condition}}</p>
 	</div>
 	<div class="day5">
- 		<h1>{{day5.weekday}}</h1>
-		 <img src=`https://openweathermap.org{{day5.icon}}@2x.png` alt="weather icon">
+ 		<h2>{{day5.weekday}}</h2>
+		 <img src="https://openweathermap.org/img/wn/{{day5.icon}}@2x.png" alt="weather icon">
 		 <p>{{day5.date}}</p>
  		 <p>{{day5.currtemp}}</p>
 		 <p>{{day5.feelslike}}</p>
@@ -71,7 +72,7 @@
 		 <p>{{day5.humidity}}</p>
 		 <p>{{day5.condition}}</p>
 	</div>
-
+	</div>
 
 </body>
 </html>

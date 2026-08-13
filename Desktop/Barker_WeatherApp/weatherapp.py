@@ -57,10 +57,10 @@ def getForecast(city, state, country, api_key):
         if date.hour == 11:
             weather = weatherDay(date.strftime("%A"),
                                  date.strftime("%m/%d"),
-                                 item['main']['temp'],
-                                 item['main']['feels_like'],
-                                 item['main']['temp_min'],
-                                 item['main']['temp_max'],
+                                 int(item['main']['temp']),
+                                 int(item['main']['feels_like']),
+                                 int(item['main']['temp_min']),
+                                 int(item['main']['temp_max']),
                                  item['main']['humidity'],
                                  item['weather'][0]['main'],
                                  item['weather'][0]['icon'])
@@ -70,6 +70,7 @@ def getForecast(city, state, country, api_key):
     day3 = forecastDays[2]
     day4 = forecastDays[3]
     day5 = forecastDays[4]
+    print(type(day1.icon))
     return day1, day2, day3, day4, day5
 
 
