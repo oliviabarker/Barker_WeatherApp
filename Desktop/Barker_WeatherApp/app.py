@@ -1,9 +1,10 @@
 #Import libraries
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, flash
 from weatherapp import getForecast as postForecast
 
 #Initializing app
 app = Flask(__name__)
+app.secret_key = "secretkey"
 
 #Setting home url and adding post method
 @app.route('/', methods = ['GET','POST'])
@@ -18,13 +19,23 @@ def temp():
     day4 = None
     day5 = None
     if request.method == 'POST':
-        city = request.form.get('city')
-        state = request.form.get('state')
-        country = request.form.get('country')
+        city = request.form.get('city', '').strip()
+        state = request.form.get('state', '').strip()
+        country = request.form.get('country', '').strip()
 ###DONT FORGET TO HIDE API KEYS
-        day1,day2,day3,day4,day5 = postForecast(city,state,country,"4a75802394effa810779155e1e869d13")
 
-    
+        if not city:
+            flash('Please enter a valid city name.')
+            return render_template('base.html',
+                                   day1 = day1,
+                                   day2 = day2,
+                                   day3 = day3,
+                                   day4 = day4,
+                                   day5 = day5)
+##        try:
+##            resp = requests.get()
+
+        day1,day2,day3,day4,day5 = postForecast(city,state,country,"4a75802394effa810779155e1e869d13")
     return render_template('base.html',
                            day1 = day1,
                            day2 = day2,
@@ -39,3 +50,6 @@ def temp():
 
 if __name__ == "__main__":
     app.run()
+
+
+###ADD A DEFAULT DISPLAY FOR LEXINGTON KENTUCKY SO THE WORDS DONT DISPLAY BY THEMSELVES AT FIRST

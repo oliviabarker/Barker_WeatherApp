@@ -7,70 +7,77 @@
 <style>
 </style>
 <script src=""></script>
-<body>
+<body style = "background-color: lightblue">
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 
 	<form method = "POST">
 		<input type = "text" name="city" placeholder = "Enter City">
 		<input type = "text" name="state" placeholder = "Enter State Code">
-		<input type = "text" name="country" placeholder = "US">
+		<input type = "text" name="country" placeholder = "Enter a Country">
 		<button type="submit">Search</button>
 	</form>
 	
-	<div style="display: flex; gap: 15px; justify-content:center; margin-top: 50px: background-color: green">
+	<div style="display: flex; gap: 50px; justify-content:center; padding-top: 50px">
 	<div class="day1">
  		<h2>{{day1.weekday}}</h2>
 		 <img src="https://openweathermap.org/img/wn/{{day1.icon}}@2x.png" alt="weather icon">
-		 <p>{{day1.date}}</p>
- 		 <p>{{day1.currtemp}}</p>
-		 <p>{{day1.feelslike}}</p>
-		 <p>{{day1.tempmin}}</p>
-		 <p>{{day1.tempmax}}</p>
-		 <p>{{day1.humidity}}</p>
-		 <p>{{day1.condition}}</p>
+		 <p>Date: {{day1.date}}</p>
+ 		 <p>Currently: {{day1.currtemp}}°F</p>
+		 <p>Feels Like: {{day1.feelslike}}°F</p>
+		 <p>Min: {{day1.tempmin}}°F</p>
+		 <p>Max: {{day1.tempmax}}°F</p>
+		 <p>Humidity: {{day1.humidity}}</p>
+		 <p>Condition: {{day1.condition}}</p>
 	</div>
 	<div class="day2">
  		<h2>{{day2.weekday}}</h2>
 		 <img src="https://openweathermap.org/img/wn/{{day2.icon}}@2x.png" alt="weather icon">
-		 <p>{{day2.date}}</p>
- 		 <p>{{day2.currtemp}}</p>
-		 <p>{{day2.feelslike}}</p>
-		 <p>{{day2.tempmin}}</p>
-		 <p>{{day2.tempmax}}</p>
-		 <p>{{day2.humidity}}</p>
-		 <p>{{day2.condition}}</p>
+		 <p>Date: {{day2.date}}</p>
+ 		 <p>Currently: {{day2.currtemp}}°F</p>
+		 <p>Feels Like: {{day2.feelslike}}°F</p>
+		 <p>Min: {{day2.tempmin}}°F</p>
+		 <p>Max: {{day2.tempmax}}°F</p>
+		 <p>Humidity: {{day2.humidity}}</p>
+		 <p>Condition: {{day2.condition}}</p>
 	</div>
 	<div class="day3">
  		<h2>{{day3.weekday}}</h2>
 		 <img src="https://openweathermap.org/img/wn/{{day3.icon}}@2x.png" alt="weather icon">
-		 <p>{{day3.date}}</p>
- 		 <p>{{day3.currtemp}}</p>
-		 <p>{{day3.feelslike}}</p>
-		 <p>{{day3.tempmin}}</p>
-		 <p>{{day3.tempmax}}</p>
-		 <p>{{day3.humidity}}</p>
-		 <p>{{day3.condition}}</p>
+		 <p>Date: {{day3.date}}</p>
+ 		 <p>Currently: {{day3.currtemp}}°F</p>
+		 <p>Feels Like: {{day3.feelslike}}°F</p>
+		 <p>Min: {{day3.tempmin}}°F</p>
+		 <p>Max: {{day3.tempmax}}°F</p>
+		 <p>Humidity: {{day3.humidity}}</p>
+		 <p>Condition: {{day3.condition}}</p>
 	</div>
 	<div class="day4">
  		<h2>{{day4.weekday}}</h2>
 		 <img src="https://openweathermap.org/img/wn/{{day4.icon}}@2x.png" alt="weather icon">
-		 <p>{{day4.date}}</p>
- 		 <p>{{day4.currtemp}}</p>
-		 <p>{{day4.feelslike}}</p>
-		 <p>{{day4.tempmin}}</p>
-		 <p>{{day4.tempmax}}</p>
-		 <p>{{day4.humidity}}</p>
-		 <p>{{day4.condition}}</p>
+		 <p>Date: {{day4.date}}</p>
+ 		 <p>Currently: {{day4.currtemp}}°F</p>
+		 <p>Feels Like: {{day4.feelslike}}°F</p>
+		 <p>Min: {{day4.tempmin}}°F</p>
+		 <p>Max: {{day4.tempmax}}°F</p>
+		 <p>Humidity: {{day4.humidity}}</p>
+		 <p>Condition: {{day4.condition}}</p>
 	</div>
 	<div class="day5">
  		<h2>{{day5.weekday}}</h2>
 		 <img src="https://openweathermap.org/img/wn/{{day5.icon}}@2x.png" alt="weather icon">
-		 <p>{{day5.date}}</p>
- 		 <p>{{day5.currtemp}}</p>
-		 <p>{{day5.feelslike}}</p>
-		 <p>{{day5.tempmin}}</p>
-		 <p>{{day5.tempmax}}</p>
-		 <p>{{day5.humidity}}</p>
-		 <p>{{day5.condition}}</p>
+		 <p>Date: {{day5.date}}</p>
+ 		 <p>Currently: {{day5.currtemp}}°F</p>
+		 <p>Feels Like: {{day5.feelslike}}°F</p>
+		 <p>Min: {{day5.tempmin}}°F</p>
+		 <p>Max: {{day5.tempmax}}°F</p>
+		 <p>Humidity: {{day5.humidity}}</p>
+		 <p>Condition: {{day5.condition}}</p>
 	</div>
 	</div>
 
