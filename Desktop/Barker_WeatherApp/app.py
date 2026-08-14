@@ -22,7 +22,7 @@ def temp():
         city = request.form.get('city', '').strip()
         state = request.form.get('state', '').strip()
         country = request.form.get('country', '').strip()
-###DONT FORGET TO HIDE API KEYS
+###DONT FORGET TO HIDE API KEYS/SECRET KEY
 
         if not city:
             flash('Please enter a valid city name.')
@@ -32,16 +32,31 @@ def temp():
                                    day3 = day3,
                                    day4 = day4,
                                    day5 = day5)
-##        try:
-##            resp = requests.get()
+        day1,day2,day3,day4,day5,code = postForecast(city,state,country,"4a75802394effa810779155e1e869d13")
 
-        day1,day2,day3,day4,day5 = postForecast(city,state,country,"4a75802394effa810779155e1e869d13")
+        print("code:", code)
+
+        if code == 429:
+            flash('Too many requests. Please try again later.')
+
+        elif code == 404:
+            flash('City not found.')
+
+        elif code == 400:
+            flash('Please enter a valid city name.')
+
+        elif 500 <= code <= 504:
+            flash('There was an issue with the server. Please try again later.')
+
+        elif code != 200:
+            flash('Something went wrong. Please try again later.')
+                  
     return render_template('base.html',
-                           day1 = day1,
-                           day2 = day2,
-                           day3 = day3,
-                           day4 = day4,
-                           day5 = day5)
+                            day1 = day1,
+                            day2 = day2,
+                            day3 = day3,
+                            day4 = day4,
+                            day5 = day5)
 
 
 ##def postWeather():

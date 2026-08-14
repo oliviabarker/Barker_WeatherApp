@@ -6,7 +6,8 @@ api_key = "4a75802394effa810779155e1e869d13"
 
 #Constructor for object of weatherDay to store weather information for independent days - both current and forecasted
 class weatherDay:
-    def __init__(this, weekday, date, currtemp, feelslike, tempmin, tempmax, humidity, condition, icon): #add an icon
+    def __init__(this, city, weekday, date, currtemp, feelslike, tempmin, tempmax, humidity, condition, icon): #add an icon
+        this.city = city
         this.weekday = weekday
         this.date = date
         this.currtemp = currtemp
@@ -26,6 +27,8 @@ class weatherDay:
 def getLatLong(city, state, country, api_key): 
     data = requests.get(f'http://api.openweathermap.org/geo/1.0/direct?q={city},{state},{country}&&appid={api_key}').json()
     # check for errors
+    if not data:
+        return None, None
     data = data[0]
     lat = data['lat']
     long = data['lon']
@@ -48,39 +51,48 @@ def getLatLong(city, state, country, api_key):
 ##    #print()
 ##    return curr_weather
 
+
+##WILL THE CODE ALWAYS BE THERE IF I ONLY ADD 11 OCLOCK TIMES???
 def getForecast(city, state, country, api_key):
     lat, long = getLatLong(city, state, country, api_key)
     data = requests.get(f'https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={long}&appid={api_key}&units={"imperial"}').json()
+    code = int(data['cod'])
+    day1 = None
+    day2 = None
+    day3 = None
+    day4 = None
+    day5 = None
     forecastDays=[]
-    for item in data['list']:
-        date = datetime.fromtimestamp(item['dt'])
-        if date.hour == 11:
-            weather = weatherDay(date.strftime("%A"),
-                                 date.strftime("%m/%d"),
-                                 int(item['main']['temp']),
-                                 int(item['main']['feels_like']),
-                                 int(item['main']['temp_min']),
-                                 int(item['main']['temp_max']),
-                                 item['main']['humidity'],
-                                 item['weather'][0]['main'],
-                                 item['weather'][0]['icon'])
-            forecastDays.append(weather)
-    day1 = forecastDays[0]
-    day2 = forecastDays[1]
-    day3 = forecastDays[2]
-    day4 = forecastDays[3]
-    day5 = forecastDays[4]
-    print(type(day1.icon))
-    return day1, day2, day3, day4, day5
+    if code==200:
+        for item in data['list']:
+            date = datetime.fromtimestamp(item['dt'])
+            if date.hour == 11:
+                weather = weatherDay(data['city']['name'],
+                                     date.strftime("%A"),
+                                     date.strftime("%m/%d"),
+                                     int(item['main']['temp']),
+                                     int(item['main']['feels_like']),
+                                     int(item['main']['temp_min']),
+                                     int(item['main']['temp_max']),
+                                     item['main']['humidity'],
+                                     item['weather'][0]['main'],
+                                     item['weather'][0]['icon'])
+                forecastDays.append(weather)
+        day1 = forecastDays[0]
+        day2 = forecastDays[1]
+        day3 = forecastDays[2]
+        day4 = forecastDays[3]
+        day5 = forecastDays[4]
+    return day1, day2, day3, day4, day5, code
 
 
 def main():
     #getCurrentWeather('Frankfort', 'KY', 'US', api_key)
     #forecastDays = getForecast('Frankfort', 'KY', 'US', api_key)
     #print(forecastDays[0].weekday,forecastDays[1].weekday,forecastDays[2].weekday,forecastDays[3].weekday,forecastDays[4].weekday)
-    day1, day2, day3, day4, day5 = getForecast('Frankfort', 'KY', 'US', api_key)
-    return day1, day2, day3, day4, day5
+    day1, day2, day3, day4, day5, code= getForecast(city, state, country, api_key)
+    return day1, day2, day3, day4, day5, code
 
 
 
-main()
+##main()
