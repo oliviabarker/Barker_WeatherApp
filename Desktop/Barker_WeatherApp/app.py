@@ -36,7 +36,13 @@ def temp():
 
         print("code:", code)
 
-        if code == 429:
+        if code == "network":
+            flash('Connection error. Please check your service and try again.')
+            
+        elif code == "timeout":
+            flash('The server took too long to respond. Please try again later.')
+            
+        elif code == 429:
             flash('Too many requests. Please try again later.')
 
         elif code == 404:

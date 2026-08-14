@@ -25,15 +25,20 @@ class weatherDay:
 
 #Retrieve location latitudinal and longitudinal data
 def getLatLong(city, state, country, api_key): 
-    data = requests.get(f'http://api.openweathermap.org/geo/1.0/direct?q={city},{state},{country}&&appid={api_key}').json()
+    try:
+        data = requests.get(f'http://api.openweathermap.org/geo/1.0/direct?q={city},{state},{country}&&appid={api_key}').json()
     # check for errors
+    except requests.exceptions.ConnectionError:
+        return None, None, "network"
+    except requests.exceptions.Timeout:
+        return None, None, "timeout"
     if not data:
-        return None, None
+        return None, None, 404
     data = data[0]
     lat = data['lat']
     long = data['lon']
     #print (data, lat, long)
-    return lat, long
+    return lat, long, 200
 
 
 #getLatLong('Frankfort', 'KY', 'US', api_key)
@@ -54,8 +59,16 @@ def getLatLong(city, state, country, api_key):
 
 ##WILL THE CODE ALWAYS BE THERE IF I ONLY ADD 11 OCLOCK TIMES???
 def getForecast(city, state, country, api_key):
-    lat, long = getLatLong(city, state, country, api_key)
-    data = requests.get(f'https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={long}&appid={api_key}&units={"imperial"}').json()
+    lat, long, code = getLatLong(city, state, country, api_key)
+    if code != 200:
+        return None, None, None, None, None, code
+    try:
+        data = requests.get(f'https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={long}&appid={api_key}&units={"imperial"}').json()
+    except requests.exceptions.ConnectionError:
+        return None, None, None, None, None, "network"
+    except requests.exceptions.Timeout:
+        return None, None, None, None, None, "timeout"
+    
     code = int(data['cod'])
     day1 = None
     day2 = None
