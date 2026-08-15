@@ -1,15 +1,16 @@
 #Import libraries
-import requests, json
-from datetime import datetime
 import os
+import requests, json
+from datetime import datetime, timezone, timedelta
 from dotenv import load_dotenv
 
+#Retrieving API key
 load_dotenv()
 api_key = os.getenv("OPENWEATHER_APIKEY")
 
-#Constructor for object of weatherDay to store weather information for independent days - both current and forecasted
+#Constructor for weatherDay object to hold forecast data for each day
 class weatherDay:
-    def __init__(this, city, weekday, date, currtemp, feelslike, tempmin, tempmax, humidity, condition, icon): #add an icon
+    def __init__(this, city, weekday, date, currtemp, feelslike, tempmin, tempmax, humidity, condition, icon):
         this.city = city
         this.weekday = weekday
         this.date = date
@@ -22,11 +23,15 @@ class weatherDay:
         this.icon = icon
 
 
-#Retrieve location latitudinal and longitudinal data
+#Retrieve location's latitude and longitude from user's inputs
 def getLatLong(city, state, country, api_key): 
+    #Try to fetch latitude and longitude
     try:
         response = requests.get(f'https://api.openweathermap.org/geo/1.0/direct?q={city},{state},{country}&appid={api_key}', timeout=10)
+        response.raise_for_status()
         data = response.json()
+
+    #Throw exception for errors and return HTTP error
     except requests.exceptions.ConnectionError:
         return None, None, "network"
     except requests.exceptions.Timeout:
@@ -35,56 +40,77 @@ def getLatLong(city, state, country, api_key):
         return None, None, response.status_code
     if not data:
         return None, None, 404
+
+    #Return latitude, longitude, and successful status code 
     data = data[0]
     lat = data['lat']
     long = data['lon']
     return lat, long, 200
 
 
-
-##WILL THE CODE ALWAYS BE THERE IF I ONLY ADD 11 OCLOCK TIMES???
+#Retrieve current weather and forecast data
 def getForecast(city, state, country, api_key):
+    #Get latitude and longitude for user's inputs
     lat, long, code = getLatLong(city, state, country, api_key)
+
+    #Return for unsuccessful status codes
     if code != 200:
-        return None, None, None, None, None, code
+        return None, code
+
+    #Try to fetch current weather and forecast data
     try:
-        data = requests.get(f'https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={long}&appid={api_key}&units={"imperial"}&limit=1', timeout=10).json()
+        response = requests.get(f'https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={long}&appid={api_key}&units={"imperial"}&limit=1', timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        response_curr = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={long}&appid={api_key}&units={"imperial"}&limit=1', timeout=10)
+        response.raise_for_status()
+        data_curr = response_curr.json()
+
+    #Throw exceptions for errors and return HTTP error codes
     except requests.exceptions.ConnectionError:
-        return None, None, None, None, None, "network"
+        return None, "network"
     except requests.exceptions.Timeout:
-        return None, None, None, None, None, "timeout"
-    
+        return None, "timeout"
+
     code = int(data['cod'])
-    day1 = None
-    day2 = None
-    day3 = None
-    day4 = None
-    day5 = None
+
+    #Make a list to contain weatherDay objects for each forecast day
     forecastDays=[]
+
+    #If successful HTTP code, create one object for each forecast day and add it to the list
     if code==200:
         dates=[]
+
+        #Modify the time to match the timezone of the location of the user's input
         for item in data['list']:
-            date = datetime.fromtimestamp(item['dt'])
+            utc_date = datetime.fromtimestamp(item['dt'], tz=timezone.utc)
+            date = utc_date + timedelta(seconds=data['city']['timezone'])
             date_key = date.strftime("%Y-%m-%d")
+
+            #Verify only one weather object is added each day
             if date_key not in dates:
                 dates.append(date_key)
+
+                #Add temperatures for each time in a day to retrieve the minimum and maximum temperature for the entire day later
+                day_temps = [item['main']['temp']
+                             for item in data['list']
+                             if (datetime.fromtimestamp(item['dt'], tz=timezone.utc)+timedelta(seconds=data['city']['timezone'])).strftime('%Y-%m-%d')==date_key]
+
+                #Create the weather object and add it to the list of forecast days
                 weather = weatherDay(city.capitalize(),
                                      date.strftime("%A"),
                                      date.strftime("%m/%d"),
-                                     int(item['main']['temp']),
+                                     int(data_curr['main']['temp']),
                                      int(item['main']['feels_like']),
-                                     int(item['main']['temp_min']),
-                                     int(item['main']['temp_max']),
+                                     int(min(day_temps)),
+                                     int(max(day_temps)),
                                      item['main']['humidity'],
                                      item['weather'][0]['main'],
                                      item['weather'][0]['icon'])
                 forecastDays.append(weather)
-        day1 = forecastDays[0]
-        day2 = forecastDays[1]
-        day3 = forecastDays[2]
-        day4 = forecastDays[3]
-        day5 = forecastDays[4]
-    return day1, day2, day3, day4, day5, code
+
+    #Return the list of forecast days and the status code
+    return forecastDays, code
 
 
 def main():

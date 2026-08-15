@@ -3,10 +3,6 @@
 <meta charset="UTF-8">
 <title>Barker's Weather App</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="">
-<style>
-</style>
-<script src=""></script>
 <body style = "background-color: lightblue">
 {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -19,61 +15,29 @@
 	<form method = "POST">
 		<input type = "text" style = "border-radius: 8px; padding: 10px" name="city" placeholder = "Enter City">
 		<input type = "text" style = "border-radius: 8px; padding: 10px" name="state" placeholder = "Enter State Code">
-		<input type = "text" style = "border-radius: 8px; padding: 10px" name="country" placeholder = "Enter a Country">
+		<input type = "text" style = "border-radius: 8px; padding: 10px" name="country" placeholder = "Enter Country">
 		<button type="submit" style = "border-radius: 8px; padding: 10px">Search</button>
 	</form>
 	
-{% if day1 %}
-	<h1 style = "text-align:center; padding-top: 20px">{{day1.city}}</h1>
+{% if forecastDays %}
+	<h1 style = "text-align:center; padding-top: 20px">{{forecastDays[0].city}}</h1>
 	
-	<div style="display: flex; gap: 0px; justify-content:center; padding-top: 20px">
-	<div class="day1" style = "background-color: gray; border-radius: 10px; padding: 10px" >
- 		<h2 style = "text-align:center">Today</h2>
-		 <img src="https://openweathermap.org/img/wn/{{day1.icon}}@2x.png" alt="weather icon">
-		 <p><span style = "font-weight: bold">Date: </span>{{day1.date}}</p>
- 		 <p><span style = "font-weight: bold">Currently: </span>{{day1.currtemp}}°F</p>
-		 <p><span style = "font-weight: bold">Feels Like: </span>{{day1.feelslike}}°F</p>
-		 <p><span style = "font-weight: bold">Min: </span>{{day1.tempmin}}°F</p>
-		 <p><span style = "font-weight: bold">Max: </span>{{day1.tempmax}}°F</p>
-		 <p><span style = "font-weight: bold">Humidity: </span>{{day1.humidity}}%</p>
-		 <p><span style = "font-weight: bold">Condition: </span>{{day1.condition}}</p>
+	<div style="display: flex; flex-wrap: wrap; gap: 0px; justify-content:center; padding-top: 20px">
+
+	{% for item in forecastDays%}
+	<div class="days" style = "background-color: gray; border-radius: 10px; padding: 10px" >
+ 		{% if loop.first %}<h2 style = "text-align:center">Today</h2>
+		{% else %}<h2 style = "text-align:center">{{item.weekday}}</h2>{% endif %}
+		 <img src="https://openweathermap.org/img/wn/{{item.icon}}@2x.png" alt="weather icon">
+		 <p><span style = "font-weight: bold">Date: </span>{{item.date}}</p>
+ 		 {% if loop.first %} <p><span style = "font-weight: bold">Currently: </span>{{item.currtemp}}°F</p> {% endif %}
+		 {% if loop.first %}<p><span style = "font-weight: bold">Feels Like: </span>{{item.feelslike}}°F</p> {% endif %}
+		 <p><span style = "font-weight: bold">Min: </span>{{item.tempmin}}°F</p>
+		 <p><span style = "font-weight: bold">Max: </span>{{item.tempmax}}°F</p>
+		 <p><span style = "font-weight: bold">Humidity: </span>{{item.humidity}}%</p>
+		 <p><span style = "font-weight: bold">Condition: </span>{{item.condition}}</p>
 	</div>
-	<div class="day2" style = "background-color: darkgray; border-radius: 10px; padding: 10px">
- 		<h2 style = "text-align:center">{{day2.weekday}}</h2>
-		 <img src="https://openweathermap.org/img/wn/{{day2.icon}}@2x.png" alt="weather icon">
-		 <p><span style = "font-weight: bold">Date: </span>{{day2.date}}</p>
-		 <p><span style = "font-weight: bold">Min: </span>{{day2.tempmin}}°F</p>
-		 <p><span style = "font-weight: bold">Max: </span>{{day2.tempmax}}°F</p>
-		 <p><span style = "font-weight: bold">Humidity: </span>{{day2.humidity}}%</p>
-		 <p><span style = "font-weight: bold">Condition: </span>{{day2.condition}}</p>
-	</div>
-	<div class="day3" style = "background-color: darkgray; border-radius: 10px; padding: 10px">
- 		<h2 style = "text-align:center">{{day3.weekday}}</h2>
-		 <img src="https://openweathermap.org/img/wn/{{day3.icon}}@2x.png" alt="weather icon">
-		 <p><span style = "font-weight: bold">Date: </span>{{day3.date}}</p>
-		 <p><span style = "font-weight: bold">Min: </span>{{day3.tempmin}}°F</p>
-		 <p><span style = "font-weight: bold">Max: </span>{{day3.tempmax}}°F</p>
-		 <p><span style = "font-weight: bold">Humidity: </span>{{day3.humidity}}%</p>
-		 <p><span style = "font-weight: bold">Condition: </span>{{day3.condition}}</p>
-	</div>
-	<div class="day4" style = "background-color: darkgray; border-radius: 10px; padding: 10px">
- 		<h2 style = "text-align:center">{{day4.weekday}}</h2>
-		 <img src="https://openweathermap.org/img/wn/{{day4.icon}}@2x.png" alt="weather icon">
-		 <p><span style = "font-weight: bold">Date: </span>{{day4.date}}</p>
-		 <p><span style = "font-weight: bold">Min: </span>{{day4.tempmin}}°F</p>
-		 <p><span style = "font-weight: bold">Max: </span>{{day4.tempmax}}°F</p>
-		 <p><span style = "font-weight: bold">Humidity: </span>{{day4.humidity}}%</p>
-		 <p><span style = "font-weight: bold">Condition: </span>{{day4.condition}}</p>
-	</div>
-	<div class="day5" style = "background-color: darkgray; border-radius: 10px; padding: 10px">
- 		<h2 style = "text-align:center">{{day5.weekday}}</h2>
-		 <img src="https://openweathermap.org/img/wn/{{day5.icon}}@2x.png" alt="weather icon">
-		 <p><span style = "font-weight: bold">Date: </span>{{day5.date}}</p>
-		 <p><span style = "font-weight: bold">Min: </span>{{day5.tempmin}}°F</p>
-		 <p><span style = "font-weight: bold">Max: </span>{{day5.tempmax}}°F</p>
-		 <p><span style = "font-weight: bold">Humidity: </span>{{day5.humidity}}%</p>
-		 <p><span style = "font-weight: bold">Condition: </span>{{day5.condition}}</p>
-	</div>
+	{% endfor %}
 	</div>
 
 {% endif %}
