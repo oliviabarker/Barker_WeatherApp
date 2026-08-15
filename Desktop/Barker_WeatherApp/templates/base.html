@@ -11,75 +11,73 @@
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
-            <p>{{ message }}</p>
+            <p style = "color: red">{{ message }}</p>
         {% endfor %}
     {% endif %}
 {% endwith %}
 
 	<form method = "POST">
-		<input type = "text" name="city" placeholder = "Enter City">
-		<input type = "text" name="state" placeholder = "Enter State Code">
-		<input type = "text" name="country" placeholder = "Enter a Country">
-		<button type="submit">Search</button>
+		<input type = "text" style = "border-radius: 8px; padding: 10px" name="city" placeholder = "Enter City">
+		<input type = "text" style = "border-radius: 8px; padding: 10px" name="state" placeholder = "Enter State Code">
+		<input type = "text" style = "border-radius: 8px; padding: 10px" name="country" placeholder = "Enter a Country">
+		<button type="submit" style = "border-radius: 8px; padding: 10px">Search</button>
 	</form>
 	
-	<div style="display: flex; gap: 50px; justify-content:center; padding-top: 50px">
-	<div class="day1">
- 		<h2>{{day1.weekday}}</h2>
+{% if day1 %}
+	<h1 style = "text-align:center; padding-top: 20px">{{day1.city}}</h1>
+	
+	<div style="display: flex; gap: 0px; justify-content:center; padding-top: 20px">
+	<div class="day1" style = "background-color: gray; border-radius: 10px; padding: 10px" >
+ 		<h2 style = "text-align:center">Today</h2>
 		 <img src="https://openweathermap.org/img/wn/{{day1.icon}}@2x.png" alt="weather icon">
-		 <p>Date: {{day1.date}}</p>
- 		 <p>Currently: {{day1.currtemp}}°F</p>
-		 <p>Feels Like: {{day1.feelslike}}°F</p>
-		 <p>Min: {{day1.tempmin}}°F</p>
-		 <p>Max: {{day1.tempmax}}°F</p>
-		 <p>Humidity: {{day1.humidity}}</p>
-		 <p>Condition: {{day1.condition}}</p>
+		 <p><span style = "font-weight: bold">Date: </span>{{day1.date}}</p>
+ 		 <p><span style = "font-weight: bold">Currently: </span>{{day1.currtemp}}°F</p>
+		 <p><span style = "font-weight: bold">Feels Like: </span>{{day1.feelslike}}°F</p>
+		 <p><span style = "font-weight: bold">Min: </span>{{day1.tempmin}}°F</p>
+		 <p><span style = "font-weight: bold">Max: </span>{{day1.tempmax}}°F</p>
+		 <p><span style = "font-weight: bold">Humidity: </span>{{day1.humidity}}%</p>
+		 <p><span style = "font-weight: bold">Condition: </span>{{day1.condition}}</p>
 	</div>
-	<div class="day2">
- 		<h2>{{day2.weekday}}</h2>
+	<div class="day2" style = "background-color: darkgray; border-radius: 10px; padding: 10px">
+ 		<h2 style = "text-align:center">{{day2.weekday}}</h2>
 		 <img src="https://openweathermap.org/img/wn/{{day2.icon}}@2x.png" alt="weather icon">
-		 <p>Date: {{day2.date}}</p>
- 		 <p>Currently: {{day2.currtemp}}°F</p>
-		 <p>Feels Like: {{day2.feelslike}}°F</p>
-		 <p>Min: {{day2.tempmin}}°F</p>
-		 <p>Max: {{day2.tempmax}}°F</p>
-		 <p>Humidity: {{day2.humidity}}</p>
-		 <p>Condition: {{day2.condition}}</p>
+		 <p><span style = "font-weight: bold">Date: </span>{{day2.date}}</p>
+		 <p><span style = "font-weight: bold">Min: </span>{{day2.tempmin}}°F</p>
+		 <p><span style = "font-weight: bold">Max: </span>{{day2.tempmax}}°F</p>
+		 <p><span style = "font-weight: bold">Humidity: </span>{{day2.humidity}}%</p>
+		 <p><span style = "font-weight: bold">Condition: </span>{{day2.condition}}</p>
 	</div>
-	<div class="day3">
- 		<h2>{{day3.weekday}}</h2>
+	<div class="day3" style = "background-color: darkgray; border-radius: 10px; padding: 10px">
+ 		<h2 style = "text-align:center">{{day3.weekday}}</h2>
 		 <img src="https://openweathermap.org/img/wn/{{day3.icon}}@2x.png" alt="weather icon">
-		 <p>Date: {{day3.date}}</p>
- 		 <p>Currently: {{day3.currtemp}}°F</p>
-		 <p>Feels Like: {{day3.feelslike}}°F</p>
-		 <p>Min: {{day3.tempmin}}°F</p>
-		 <p>Max: {{day3.tempmax}}°F</p>
-		 <p>Humidity: {{day3.humidity}}</p>
-		 <p>Condition: {{day3.condition}}</p>
+		 <p><span style = "font-weight: bold">Date: </span>{{day3.date}}</p>
+		 <p><span style = "font-weight: bold">Min: </span>{{day3.tempmin}}°F</p>
+		 <p><span style = "font-weight: bold">Max: </span>{{day3.tempmax}}°F</p>
+		 <p><span style = "font-weight: bold">Humidity: </span>{{day3.humidity}}%</p>
+		 <p><span style = "font-weight: bold">Condition: </span>{{day3.condition}}</p>
 	</div>
-	<div class="day4">
- 		<h2>{{day4.weekday}}</h2>
+	<div class="day4" style = "background-color: darkgray; border-radius: 10px; padding: 10px">
+ 		<h2 style = "text-align:center">{{day4.weekday}}</h2>
 		 <img src="https://openweathermap.org/img/wn/{{day4.icon}}@2x.png" alt="weather icon">
-		 <p>Date: {{day4.date}}</p>
- 		 <p>Currently: {{day4.currtemp}}°F</p>
-		 <p>Feels Like: {{day4.feelslike}}°F</p>
-		 <p>Min: {{day4.tempmin}}°F</p>
-		 <p>Max: {{day4.tempmax}}°F</p>
-		 <p>Humidity: {{day4.humidity}}</p>
-		 <p>Condition: {{day4.condition}}</p>
+		 <p><span style = "font-weight: bold">Date: </span>{{day4.date}}</p>
+		 <p><span style = "font-weight: bold">Min: </span>{{day4.tempmin}}°F</p>
+		 <p><span style = "font-weight: bold">Max: </span>{{day4.tempmax}}°F</p>
+		 <p><span style = "font-weight: bold">Humidity: </span>{{day4.humidity}}%</p>
+		 <p><span style = "font-weight: bold">Condition: </span>{{day4.condition}}</p>
 	</div>
-	<div class="day5">
- 		<h2>{{day5.weekday}}</h2>
+	<div class="day5" style = "background-color: darkgray; border-radius: 10px; padding: 10px">
+ 		<h2 style = "text-align:center">{{day5.weekday}}</h2>
 		 <img src="https://openweathermap.org/img/wn/{{day5.icon}}@2x.png" alt="weather icon">
-		 <p>Date: {{day5.date}}</p>
- 		 <p>Currently: {{day5.currtemp}}°F</p>
-		 <p>Feels Like: {{day5.feelslike}}°F</p>
-		 <p>Min: {{day5.tempmin}}°F</p>
-		 <p>Max: {{day5.tempmax}}°F</p>
-		 <p>Humidity: {{day5.humidity}}</p>
-		 <p>Condition: {{day5.condition}}</p>
+		 <p><span style = "font-weight: bold">Date: </span>{{day5.date}}</p>
+		 <p><span style = "font-weight: bold">Min: </span>{{day5.tempmin}}°F</p>
+		 <p><span style = "font-weight: bold">Max: </span>{{day5.tempmax}}°F</p>
+		 <p><span style = "font-weight: bold">Humidity: </span>{{day5.humidity}}%</p>
+		 <p><span style = "font-weight: bold">Condition: </span>{{day5.condition}}</p>
 	</div>
 	</div>
+
+{% endif %}
+
 
 </body>
 </html>

@@ -1,8 +1,11 @@
 #Import libraries
 import requests, json
 from datetime import datetime
+import os
+from dotenv import load_dotenv
 
-api_key = "4a75802394effa810779155e1e869d13"
+load_dotenv()
+api_key = os.getenv("OPENWEATHER_APIKEY")
 
 #Constructor for object of weatherDay to store weather information for independent days - both current and forecasted
 class weatherDay:
@@ -19,42 +22,24 @@ class weatherDay:
         this.icon = icon
 
 
-#Request city, state, and country from user
-
-
-
 #Retrieve location latitudinal and longitudinal data
 def getLatLong(city, state, country, api_key): 
     try:
-        data = requests.get(f'http://api.openweathermap.org/geo/1.0/direct?q={city},{state},{country}&&appid={api_key}').json()
-    # check for errors
+        response = requests.get(f'https://api.openweathermap.org/geo/1.0/direct?q={city},{state},{country}&appid={api_key}', timeout=10)
+        data = response.json()
     except requests.exceptions.ConnectionError:
         return None, None, "network"
     except requests.exceptions.Timeout:
         return None, None, "timeout"
+    if response.status_code != 200:
+        return None, None, response.status_code
     if not data:
         return None, None, 404
     data = data[0]
     lat = data['lat']
     long = data['lon']
-    #print (data, lat, long)
     return lat, long, 200
 
-
-#getLatLong('Frankfort', 'KY', 'US', api_key)
-
-#Request current weather with lat and long
-##def getCurrentWeather(city, state, country, api_key):
-##    lat, long = getLatLong(city, state, country, api_key)
-##    data = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={long}&appid={api_key}&units={"imperial"}').json()
-####CHECK FOR CODE TO MAKE SURE NO ERRORS
-##    #converting unix object
-##    date = datetime.fromtimestamp(data['dt'])
-##    curr_weather = weatherDay(date.strftime("%A"), date.strftime("%m/%d"), data['main']['temp'], \
-##                              data['main']['feels_like'], data['main']['temp_min'], data['main']['temp_max'], \
-##                              data['main']['humidity'], data['weather'][0]['main'], data['weather'][0]['icon'])
-##    #print()
-##    return curr_weather
 
 
 ##WILL THE CODE ALWAYS BE THERE IF I ONLY ADD 11 OCLOCK TIMES???
@@ -63,7 +48,7 @@ def getForecast(city, state, country, api_key):
     if code != 200:
         return None, None, None, None, None, code
     try:
-        data = requests.get(f'https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={long}&appid={api_key}&units={"imperial"}').json()
+        data = requests.get(f'https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={long}&appid={api_key}&units={"imperial"}&limit=1', timeout=10).json()
     except requests.exceptions.ConnectionError:
         return None, None, None, None, None, "network"
     except requests.exceptions.Timeout:
@@ -77,10 +62,13 @@ def getForecast(city, state, country, api_key):
     day5 = None
     forecastDays=[]
     if code==200:
+        dates=[]
         for item in data['list']:
             date = datetime.fromtimestamp(item['dt'])
-            if date.hour == 11:
-                weather = weatherDay(data['city']['name'],
+            date_key = date.strftime("%Y-%m-%d")
+            if date_key not in dates:
+                dates.append(date_key)
+                weather = weatherDay(city.capitalize(),
                                      date.strftime("%A"),
                                      date.strftime("%m/%d"),
                                      int(item['main']['temp']),
@@ -100,12 +88,5 @@ def getForecast(city, state, country, api_key):
 
 
 def main():
-    #getCurrentWeather('Frankfort', 'KY', 'US', api_key)
-    #forecastDays = getForecast('Frankfort', 'KY', 'US', api_key)
-    #print(forecastDays[0].weekday,forecastDays[1].weekday,forecastDays[2].weekday,forecastDays[3].weekday,forecastDays[4].weekday)
-    day1, day2, day3, day4, day5, code= getForecast(city, state, country, api_key)
-    return day1, day2, day3, day4, day5, code
+    return getForecast(city, state, country, api_key)
 
-
-
-##main()

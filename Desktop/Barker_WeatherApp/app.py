@@ -1,16 +1,18 @@
 #Import libraries
 from flask import Flask, jsonify, render_template, request, flash
 from weatherapp import getForecast as postForecast
+import os
+from dotenv import load_dotenv
 
 #Initializing app
 app = Flask(__name__)
-app.secret_key = "secretkey"
+load_dotenv()
+app.secret_key = os.getenv("APP_SECRET_KEY")
 
 #Setting home url and adding post method
 @app.route('/', methods = ['GET','POST'])
 
-##def post():
-##    forecastDays=postForecast()
+##NOT CURRENT TEMP ON FUTRUE
 
 def temp():
     day1 = None
@@ -32,7 +34,7 @@ def temp():
                                    day3 = day3,
                                    day4 = day4,
                                    day5 = day5)
-        day1,day2,day3,day4,day5,code = postForecast(city,state,country,"4a75802394effa810779155e1e869d13")
+        day1,day2,day3,day4,day5,code = postForecast(city,state,country, os.getenv("OPENWEATHER_APIKEY"))
 
         print("code:", code)
 
@@ -65,12 +67,6 @@ def temp():
                             day5 = day5)
 
 
-##def postWeather():
-##    forecastDays = postForecast()
-##    return jsonify({'day1':day1.__dict__, 'day2':day2.__dict__, 'day3':day3.__dict__, 'day4':day4.__dict__, 'day5':day5.__dict__,})
 
 if __name__ == "__main__":
     app.run()
-
-
-###ADD A DEFAULT DISPLAY FOR LEXINGTON KENTUCKY SO THE WORDS DONT DISPLAY BY THEMSELVES AT FIRST
