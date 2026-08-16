@@ -1,6 +1,6 @@
 # Barker's Weather App
 
-A python application that takes a city, state, and country from the user and displays the current weather and a five day forecast for the location using Open Weather API.
+A python web application that takes a city, state, and country from the user and displays the current weather and a five day forecast for the location using OpenWeather API.
 
 ## Appearance
 
@@ -27,11 +27,11 @@ Sample Error Messages:
 
 * User inputs a location
 * City input is validated
-* Location input is converted to latitude and longitude with Open Weather's Geocoding API
-* Latitude and longitude are used to get current and forecast weather data with Open Weather's Current Weather and Five Day Forecast APIs
-* API repsonses are checked for errors
+* Location input is converted to latitude and longitude with OpenWeather's Geocoding API
+* Latitude and longitude are used to get current and forecast weather data with OpenWeather's Current Weather and Five Day Forecast APIs
+* API responses are checked for errors
 * Objects are constructed containing current and forecast weather data for each day
-* Objects are passed to and HTML file to be rendered back to the user
+* Objects are passed to an HTML file to be rendered back to the user
 
 ## Technologies
 
