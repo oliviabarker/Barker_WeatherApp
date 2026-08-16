@@ -30,7 +30,7 @@ def temp():
         #Recieving list of objects containing weather forecast data and HTTP status code
         forecastDays,code = postForecast(city,state,country, os.getenv("OPENWEATHER_APIKEY"))
 
-        #Checking for errors and flashing messages for expected errors
+        #Checking for errors and flashing error messages
         if code == "network":
             flash('Connection error. Please check your service and try again.')
             
