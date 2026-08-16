@@ -120,6 +120,9 @@ def getForecast(city, state, country, api_key):
                     
                 forecastDays.append(weather)
 
+                if len(forecastDays) == 5:
+                    break
+
     #Return the list of forecast days and the status code
     return forecastDays, code
 
