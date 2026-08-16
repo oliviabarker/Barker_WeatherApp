@@ -1,6 +1,6 @@
 #Import libraries
 import os
-from flask import Flask, jsonify, render_template, request, flash
+from flask import Flask, render_template, request, flash
 from weatherapp import getForecast as postForecast
 from dotenv import load_dotenv
 
