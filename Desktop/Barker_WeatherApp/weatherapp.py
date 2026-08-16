@@ -1,12 +1,7 @@
 #Import libraries
-import os
-import requests, json
+import requests
 from datetime import datetime, timezone, timedelta
-from dotenv import load_dotenv
 
-#Retrieving API key
-load_dotenv()
-api_key = os.getenv("OPENWEATHER_APIKEY")
 
 #Constructor for weatherDay object to hold forecast data for each day
 class weatherDay:
@@ -28,7 +23,6 @@ def getLatLong(city, state, country, api_key):
     #Try to fetch latitude and longitude
     try:
         response = requests.get(f'https://api.openweathermap.org/geo/1.0/direct?q={city},{state},{country}&appid={api_key}', timeout=10)
-        response.raise_for_status()
         data = response.json()
 
     #Throw exception for errors and return HTTP error
@@ -59,18 +53,20 @@ def getForecast(city, state, country, api_key):
 
     #Try to fetch current weather and forecast data
     try:
-        response = requests.get(f'https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={long}&appid={api_key}&units={"imperial"}&limit=1', timeout=10)
-        response.raise_for_status()
-        data = response.json()
-        response_curr = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={long}&appid={api_key}&units={"imperial"}&limit=1', timeout=10)
-        response.raise_for_status()
-        data_curr = response_curr.json()
+        response = requests.get(f'https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={long}&appid={api_key}&units={"imperial"}', timeout=10)
+        response_curr = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={long}&appid={api_key}&units={"imperial"}', timeout=10)
 
     #Throw exceptions for errors and return HTTP error codes
     except requests.exceptions.ConnectionError:
         return None, "network"
     except requests.exceptions.Timeout:
         return None, "timeout"
+    if response.status_code != 200:
+        return None, response.status_code
+    data = response.json()
+    if response_curr.status_code != 200:
+        return None, response_curr.status_code
+    data_curr = response_curr.json()
 
     code = int(data['cod'])
 
@@ -82,6 +78,7 @@ def getForecast(city, state, country, api_key):
         dates=[]
 
         #Modify the time to match the timezone of the location of the user's input
+        today = True
         for item in data['list']:
             utc_date = datetime.fromtimestamp(item['dt'], tz=timezone.utc)
             date = utc_date + timedelta(seconds=data['city']['timezone'])
@@ -97,22 +94,32 @@ def getForecast(city, state, country, api_key):
                              if (datetime.fromtimestamp(item['dt'], tz=timezone.utc)+timedelta(seconds=data['city']['timezone'])).strftime('%Y-%m-%d')==date_key]
 
                 #Create the weather object and add it to the list of forecast days
-                weather = weatherDay(city.capitalize(),
-                                     date.strftime("%A"),
-                                     date.strftime("%m/%d"),
-                                     int(data_curr['main']['temp']),
-                                     int(item['main']['feels_like']),
-                                     int(min(day_temps)),
-                                     int(max(day_temps)),
-                                     item['main']['humidity'],
-                                     item['weather'][0]['main'],
-                                     item['weather'][0]['icon'])
+                if today:
+                    weather = weatherDay(city.capitalize(),
+                                         date.strftime("%A"),
+                                         date.strftime("%m/%d"),
+                                         int(data_curr['main']['temp']),
+                                         int(data_curr['main']['feels_like']),
+                                         int(min(day_temps)),
+                                         int(max(day_temps)),
+                                         data_curr['main']['humidity'],
+                                         data_curr['weather'][0]['main'],
+                                         data_curr['weather'][0]['icon'])
+                else:
+                    weather = weatherDay(city.capitalize(),
+                                         date.strftime("%A"),
+                                         date.strftime("%m/%d"),
+                                         int(data_curr['main']['temp']),
+                                         int(data_curr['main']['feels_like']),
+                                         int(min(day_temps)),
+                                         int(max(day_temps)),
+                                         item['main']['humidity'],
+                                         item['weather'][0]['main'],
+                                         item['weather'][0]['icon'])
+                today = False
+                    
                 forecastDays.append(weather)
 
     #Return the list of forecast days and the status code
     return forecastDays, code
-
-
-def main():
-    return getForecast(city, state, country, api_key)
 

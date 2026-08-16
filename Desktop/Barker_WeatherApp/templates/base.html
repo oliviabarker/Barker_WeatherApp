@@ -3,7 +3,11 @@
 <meta charset="UTF-8">
 <title>Barker's Weather App</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<body style = "background-color: lightblue">
+<head>
+<body style = "background-image: url('https://www.treehugger.com/thmb/m6LuOArZAptwMM2elQQBrsq-cyY=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/sunny-day-1308308199-a9cb79ef20c1415586e8ea95b50a8695.jpg'); background-size : cover; background-position: center; background-repeat: no-repeat; height: 700px">
+
+<!--Retrieve flashed messages for errors-->
+
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
@@ -12,20 +16,26 @@
     {% endif %}
 {% endwith %}
 
+<!--Get user inputs and set placeholders for input boxes-->
+
 	<form method = "POST">
 		<input type = "text" style = "border-radius: 8px; padding: 10px" name="city" placeholder = "Enter City">
 		<input type = "text" style = "border-radius: 8px; padding: 10px" name="state" placeholder = "Enter State Code">
 		<input type = "text" style = "border-radius: 8px; padding: 10px" name="country" placeholder = "Enter Country">
-		<button type="submit" style = "border-radius: 8px; padding: 10px">Search</button>
+		<button type="submit" style = "border-radius: 8px; padding: 10px">Get Forecast</button>
 	</form>
+
+
+<!--Retrieve data for each forecast day-->
 	
 {% if forecastDays %}
-	<h1 style = "text-align:center; padding-top: 20px">{{forecastDays[0].city}}</h1>
+	<h1 style = "text-align:center; font-size: 45px; padding-top: 40px">{{forecastDays[0].city}}</h1>
 	
-	<div style="display: flex; flex-wrap: wrap; gap: 0px; justify-content:center; padding-top: 20px">
+	<div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content:center; padding-top: 40px">
 
 	{% for item in forecastDays%}
-	<div class="days" style = "background-color: gray; border-radius: 10px; padding: 10px" >
+	{% if loop.first %}<div class="days" style = "background-color: gray; border-radius: 10px; padding: 10px" >
+	{% else %}<div class="days" style = "background-color: darkgray; border-radius: 10px; padding: 10px" > {% endif %}
  		{% if loop.first %}<h2 style = "text-align:center">Today</h2>
 		{% else %}<h2 style = "text-align:center">{{item.weekday}}</h2>{% endif %}
 		 <img src="https://openweathermap.org/img/wn/{{item.icon}}@2x.png" alt="weather icon">
@@ -44,4 +54,5 @@
 
 
 </body>
+</head>
 </html>
